@@ -6,9 +6,9 @@ This customized keymap is designed to work with [SmartEEPROM–enabled][pr] firm
 
 ### Media keys
 
-**F9**–**F12** are replaced with **Play/Pause**, **Mute**, **Volume Down**, and **Volume Up** (in that order).
+**F9**–**F12** are replaced with **Play/Pause**, **Mute**, **Volume Down**, and **Volume Up** (in that order). Tap **Play/Pause** twice for **Next Track**.
 
-> **Previous Track** and **Next Track** keys are omitted in part because many keycap sets don't include them.
+> Dedicated **Previous Track** and **Next Track** keys are omitted in part because many keycap sets don't include them.
 
 ### Modifiers
 
