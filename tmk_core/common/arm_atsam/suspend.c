@@ -2,6 +2,7 @@
 #include "i2c_master.h"
 #include "md_rgb_matrix.h"
 #include "suspend.h"
+#include "./usb/ui.h"
 
 /** \brief Suspend idle
  *
@@ -36,12 +37,16 @@ void suspend_power_down(void) {
 
 __attribute__((weak)) void matrix_power_up(void) {}
 __attribute__((weak)) void matrix_power_down(void) {}
-bool                       suspend_wakeup_condition(void) {
-    matrix_power_up();
-    matrix_scan();
-    matrix_power_down();
-    for (uint8_t r = 0; r < MATRIX_ROWS; r++) {
-        if (matrix_get_row(r)) return true;
+bool suspend_wakeup_condition(void) {
+    if (ui_is_remotewakeup_enabled()) {
+        matrix_power_up();
+        matrix_scan();
+        matrix_power_down();
+        for (uint8_t r = 0; r < MATRIX_ROWS; r++) {
+            if (matrix_get_row(r)) return true;
+        }
+    } else {
+        matrix_power_down();
     }
     return false;
 }

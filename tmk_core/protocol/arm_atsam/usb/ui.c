@@ -55,6 +55,8 @@
 //! Sequence process running each \c SEQUENCE_PERIOD ms
 #define SEQUENCE_PERIOD 150
 
+static bool ui_is_wakeup_enabled = true;
+
 #if 0
 /* Interrupt on "pin change" from push button to do wakeup on USB
  * Note:
@@ -68,13 +70,15 @@ static void ui_wakeup_handler(void)
 }
 #endif
 
-void ui_init(void) {}
+void ui_init(void) { ui_is_wakeup_enabled = true; }
 
 void ui_powerdown(void) {}
 
-void ui_wakeup_enable(void) {}
+void ui_wakeup_enable(void) { ui_is_wakeup_enabled = true; }
 
-void ui_wakeup_disable(void) {}
+void ui_wakeup_disable(void) { ui_is_wakeup_enabled = false; }
+
+bool ui_is_remotewakeup_enabled(void) { return ui_is_wakeup_enabled; }
 
 void ui_wakeup(void) {}
 
