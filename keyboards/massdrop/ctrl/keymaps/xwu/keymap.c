@@ -7,6 +7,9 @@ enum ctrl_keycodes {
     DBG_KBD,               // DEBUG Toggle Keyboard Prints
     DBG_MOU,               // DEBUG Toggle Mouse Prints
     MD_BOOT,               // Restart into bootloader after hold timeout
+
+    KC_MCON,               // Mission Control (macOS)
+    KC_LPAD,               // Launchpad (macOS)
 };
 
 #define TG_NKRO MAGIC_TOGGLE_NKRO // Toggle 6KRO / NKRO mode
@@ -27,7 +30,7 @@ keymap_config_t keymap_config;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
-        KC_ESC,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   TD_PLNX, KC_MUTE, KC_VOLD, KC_VOLU,            KC_PSCR, KC_SLCK, KC_PAUS, \
+        KC_ESC,  KC_BRID, KC_BRIU, KC_MCON, KC_LPAD, KC_F5,   KC_F6,   KC_MPRV, KC_MPLY, KC_MNXT, KC_MUTE, KC_VOLD, KC_VOLU,            KC_PSCR, KC_SLCK, KC_PAUS, \
         KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,   KC_INS,  KC_HOME, KC_PGUP, \
         KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,   KC_DEL,  KC_END,  KC_PGDN, \
         KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, KC_ENT, \
@@ -35,7 +38,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LCTL, KC_LALT, KC_LGUI,                   KC_SPC,                             KC_RGUI, KC_RALT, MO(1),   KC_RCTL,            KC_LEFT, KC_DOWN, KC_RGHT \
     ),
     [1] = LAYOUT(
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_F9,   KC_F10,  KC_F11,  KC_F12,             _______, _______, RGB_TOG, \
+        _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   _______, _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,             _______, _______, RGB_TOG, \
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,   RGB_HUI, RGB_SAI, RGB_VAI, \
         _______, _______, _______, _______, _______, _______, _______, _______, U_T_AGCR,_______, _______, _______, _______, _______,   RGB_HUD, RGB_SAD, RGB_VAD, \
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
@@ -167,6 +170,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 if (timer_elapsed32(key_timer) >= BOOTKEY_HOLD_MS) {
                     reset_keyboard();
                 }
+            }
+            return false;
+        case KC_MCON:
+            if (record->event.pressed) {
+                host_consumer_send(0x29F); // AC Desktop Show All Windows.
+            } else {
+                host_consumer_send(0);
+            }
+            return false;
+        case KC_LPAD:
+            if (record->event.pressed) {
+                host_consumer_send(0x2A0);
+            } else {
+                host_consumer_send(0);
             }
             return false;
         case EEP_RST:
